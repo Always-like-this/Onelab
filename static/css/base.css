@@ -1,0 +1,30 @@
+.logo{
+    width: 100px;
+}
+
+body{
+    /*background: #f3f3f3;*/
+    background-image:url("/static/images/4.jpg");
+
+}
+/*.main{*/
+    /*background: #fff;*/
+    /*width: 730px;*/
+    /*margin: 0 auto;*/
+    /*overflow: hidden;*/
+    /*padding: 10px;*/
+/*}*/
+.main{
+    background: #fff;
+    width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.page-title{
+    text-align: center;
+}
+#top_page{
+    background-image:url("/static/images/4.jpg");
+}

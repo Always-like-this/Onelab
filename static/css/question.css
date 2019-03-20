@@ -1,0 +1,12 @@
+.form-container{
+    width: 500px;
+    margin: 0 auto;
+    text-align: left;
+}
+#create_task{
+    float: right;
+}
+.assignee_all{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

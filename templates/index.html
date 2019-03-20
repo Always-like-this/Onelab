@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block head %}
+    <script src="/static/js/index.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block main %}
+    <ul class="question-list-group">
+        {% for question in questions %}
+            <li>
+                <div class="question-group">
+                    <img title="{{ question.type.type }}" src="{{ url_for('static',filename="images/"+question.type.type+".png") }}" alt="" class="avatar">
+                    <p class="question-title"><a title="{{ question.type.type }}" href="{{ url_for('detail',question_id=question.id) }}">ONELABS-{{ question.id }}</a></p>
+                    <p class="question-content"><a href="{{ url_for('detail',question_id=question.id) }}">{{ question.title }}</a></p>
+{#                    <div class="question-info">#}
+{#                        <span class="question-author">{{ question.author.username }}</span>#}
+{#                        <span class="question-time">{{ question.create_time }}</span>#}
+{#                    </div>#}
+                </div>
+            </li>
+
+        {% endfor %}
+        <input id="backgroud_color" type="hidden" value="{{ backgroud.style_color}}">
+    </ul>
+{% endblock %}

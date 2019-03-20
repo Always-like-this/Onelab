@@ -1,0 +1,96 @@
+.question-info{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.answer-list{
+    padding-left: 0;
+}
+
+.answer-list li{
+    list-style: none;
+    border-bottom: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.avatar{
+    width: 40px;
+    height:40px;
+    border-radius: 50%;
+}
+
+.user-info{
+    font-size:16px;
+    color: #9b9b9b;
+    line-height: 40px;
+}
+
+.user-info .username{
+    margin-left: 15px;
+}
+
+.answer-content{
+    margin-left: 60px;
+}
+
+.user-info .create-time{
+    float: right;
+}
+
+/*#task_opetion {*/
+    /*text-align: center;*/
+    /*margin-top: 20px;*/
+/*}*/
+
+#assignee {
+    color: blue;
+    /*background: #C0C0C0;*/
+    height: 30px;
+
+}
+
+#reporter {
+    color: blue;
+    /*background: #C0C0C0;*/
+    height: 30px;
+
+}
+
+/*h5{padding:0px; margin:0px;}*/
+
+#c1{
+    margin:10px;
+    width:500px;
+    height:1px;
+    background:  #CCC;
+}
+
+.detail_message {
+    margin:10px;
+    /*margin-top:30px;*/
+}
+
+.property{
+    margin-right:20px;
+}
+
+.value-task{
+    margin-right: 20px;
+}
+
+.task_content{
+    width: 30%;
+    height: 200px;
+}
+.description{
+    margin: 20px;
+}
+.create_time{
+    margin: 20px;
+}
+.username{
+    color: blue;
+}
+.comment{
+    color: blue;
+}

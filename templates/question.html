@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}创建任务{% endblock %}
+
+{% block head %}
+{#    <script>$("#cheat_task").style.background='#e7e7e7'</script>#}
+    <script src="/static/js/question.js?v=1.0.1"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/question.css') }}">
+{% endblock %}
+
+{% block main %}
+    <input id="backgroud_color" type="hidden" value="{{ backgroud.style_color}}">
+    <h3 class="page-title">创建</h3>
+    <form action="" method="post" onsubmit="return check_create();">
+
+        <div class="form-container">
+            <div class="form-group">
+                <span>标题 ：</span>
+                <input id="title_name" onblur="check_title()"  onfocus="repeat_check_title()" type="text" placeholder="请输入标题" name="title" class="form-control">
+                <div id="title_error_message" style="color: red"></div>
+            </div>
+            <div class="form-group">
+                <span>任务描述 ：</span>
+                <textarea id="content_name" onblur="check_content()" onfocus="repeat_check_content()" name="content" rows="5" placeholder="请输入任务描述" class="form-control"></textarea>
+                <div id="content_error_message" style="color: red"></div>
+            </div>
+            <div class="type_all">
+                <span >类型 : </span>
+                <span >
+                    <select name="type">
+                        {% for type_value in types %}
+                            <option value="{{ type_value.type}}">{{ type_value.type }}</option>
+                        {% endfor %}
+                   </select>
+                </span>
+            </div>
+            <div class="assignee_all">
+                <span class = "assignee">开发者 : </span>
+                <span class="type_value">
+                    <input name="assginee" type="text" style="width: 100px" >
+                </span>
+            </div>
+            <div class="assignee_all">
+                <span class = "estimated">预计时间 : </span>
+                <span class="estimated_value">
+                    <input id="" type="text" name = "estimated" style="width: 30px">小时
+                </span>
+            </div>
+            <div id="error_message"></div>
+            <div class="form-group">
+                    <button id="create_task" type="submit" class="btn btn-primary">立即创建</button>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

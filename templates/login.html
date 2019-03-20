@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+
+{% block head %}
+    <script src="/static/js/login.js?v=1.0.1"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/login_regist.css') }}">
+{% endblock %}
+
+{% block main %}
+    <h3 class="page-title">登录</h3>
+    <form action="" method="POST" onsubmit="return check_all();">
+        <div class="form-container">
+            <div class="form-group">
+                <input type="text" id="phone" class="form-control" placeholder="手机号码" name="telephone"
+                       >
+
+            </div>
+            <div id = "telephone_error_message" class = "form-message"></div>
+            <div class="form-group">
+                <input type="password" id="password" class="form-control" placeholder="密码" name="password">
+                <div id = "password_error_message" class = "form-message"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="submit" class="btn btn-primary btn-block">登录</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
