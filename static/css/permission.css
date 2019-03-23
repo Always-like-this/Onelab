@@ -1,0 +1,39 @@
+.main{
+    background: #fff;
+    width: 730px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+#permission{
+  margin-left: 200px;
+
+}
+#common{
+  font-size: 20px;
+  //background: #009900;
+}
+#admin{
+  font-size: 20px;
+}
+#update{
+  font-size: 20px
+}
+#c1{
+  margin:10px;
+  width:500px;
+  height:1px;
+  background:  #CCC;
+}
+.username{
+  margin-left: 150px;
+}
+.permission{
+  margin :30px;
+}
+.reminder_message{
+  text-align:center;
+  width:130px;
+  margin: 0 auto;
+  background: #00FF00;
+}

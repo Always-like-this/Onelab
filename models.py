@@ -11,6 +11,8 @@ class User(db.Model):
     telephone = db.Column(db.String(11), nullable=False)
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(50))
+    validate = db.Column(db.Integer)
 
     def __init__(self,*args, **kwargs):
         telephone = kwargs.get('telephone')
@@ -23,6 +25,10 @@ class User(db.Model):
 
     def check_password(self, raw_password):
         result = check_password_hash(self.password, raw_password)
+        return result
+
+    def new_password(self,password):
+        result = generate_password_hash(password)
         return result
 
 
@@ -118,3 +124,11 @@ class Backgroud(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     style_color = db.Column(db.String(30), nullable=False)
     author = db.relationship('User', backref=db.backref('backgrouds'))
+
+
+class Permission(db.Model):
+    __tablename__ = 'permission'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    permission = db.Column(db.String(50), nullable=False)
+    author = db.relationship('User', backref=db.backref('permission'))

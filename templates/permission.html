@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}权限管理{% endblock %}
+
+{% block head %}
+    <script src="/static/js/permission.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/permission.css') }}">
+{% endblock %}
+
+{% block main %}
+    <input id="backgroud_color" type="hidden" value="{{ backgroud.style_color}}">
+    <div id = "permission" class="btn-group" role="group" aria-label="...">
+      <button id="common" onclick="show_common()" type="button" class="btn btn-default">普通用户</button>
+      <button id="update" onclick="show_update()" type="button" class="btn btn-default">开发用户</button>
+      <button id ="admin" onclick="show_admin()" type="button" class="btn btn-default">管理员</button>
+    </div>
+    <div class="reminder_message" style="display: none"></div>
+    {% for user in permission_all %}
+       {% if user.permission=='common' %}
+           <div class="common" style="display: block">
+           <div id="c1"></div>
+            <span class="username">{{ user.author.username }}</span>
+            <span class="permission">{{ user.permission }}</span>
+            <span class="option"><a onclick="add_develop({{ user.author.id }})" title="添加权限为开发者">添加</a></span>
+           </div>
+
+       {% elif user.permission=='update' %}
+            <div class="update" style="display: none">
+            <div  id="c1"></div>
+            <span class="username">{{ user.author.username }}</span>
+            <span class="permission">{{ user.permission }}</span>
+            <span class="option"><a onclick="add_admin({{ user.author.id }})" title="添加权限为管理员">添加</a></span>
+            <span class="option" style="margin: 20px"><a onclick="del_develop({{ user.author.id }})" title="移除权限为普通用户">移除</a></span>
+        </div>
+       {% elif user.permission=='admin' %}
+        <ul class="admin" style="display: none">
+            <div id="c1"></div>
+            <span class="username">{{ user.author.username }}</span>
+            <span class="permission">{{ user.permission }}</span>
+            <span class="option"><a onclick="del_admin({{ user.author.id }})" title="移除权限为开发者">移除</a></span>
+        </ul>
+        {% endif %}
+    {% endfor %}
+    <div id="c1"></div>
+{% endblock %}

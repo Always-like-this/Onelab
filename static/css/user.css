@@ -1,0 +1,27 @@
+.main{
+    background: #fff;
+    width: 730px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.form-container{
+    margin: 20px;
+}
+
+.form-message{
+    margin: 20px;
+}
+#c1{
+    margin:10px;
+    width:500px;
+    height:1px;
+    background:  #CCC;
+}
+.reminder_message{
+    text-align:center;
+    width:130px;
+    margin: 0 auto;
+    background: #00FF00;
+}

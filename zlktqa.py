@@ -1,11 +1,11 @@
 # encoding: utf-8
 from flask import Flask, render_template, request, redirect, url_for, session, g
 import config
-from models import User, Question, Answer, Status, Type, Logged, Comment, History, Backgroud
+from models import User, Question, Answer, Status, Type, Logged, Comment, History, Backgroud, Permission
 from exts import db
 from decorators import login_required
 from sqlalchemy import or_
-
+from send_email import send_email
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
@@ -14,10 +14,10 @@ db.init_app(app)
 @app.route('/')
 @login_required
 def index():
-
     context = {
         'questions': Question.query.order_by('-create_time').all(),
         'backgroud': Backgroud.query.filter(Backgroud.author == g.user).first(),
+        'permission': Permission.query.filter(Permission.author_id == g.user.id).first(),
 
     }
     return render_template('index.html', **context)
@@ -49,7 +49,6 @@ def regist():
         username = request.form.get('username')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-
         # 手机号码验证，如果被注册了，就不能再注册了
         user = User.query.filter(User.telephone == telephone).first()
         if user:
@@ -79,6 +78,62 @@ def check_login():
         return redirect(url_for('index'))
     else:
         return '2'
+
+
+@app.route('/update_password/', methods=['POST'])
+@login_required
+def update_password():
+    password = request.form.get('password')
+    try:
+        user = User.query.filter(User.id == g.user.id).first()
+        user.password = user.new_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return '1'
+    except:
+        return '0'
+
+
+@app.route('/edit_info/', methods=['GET', 'POST'])
+@login_required
+def edit_info():
+    permission = Permission.query.filter(Permission.author_id == g.user.id).first()
+    if request.method == 'GET':
+        backgroud = Backgroud.query.filter(Backgroud.author == g.user).first()
+        user = User.query.filter(User.id == g.user.id).first()
+        return render_template('user.html', user=user, backgroud=backgroud,permission=permission)
+    else:
+        user_key = request.form.get('user_key')
+        user_value = request.form.get('user_value')
+        user1 = User.query.filter(User.id == g.user.id).first()
+        try:
+
+            if user_key == 'email':
+                user2 = User.query.filter(User.email == user_value).first()
+                if user_value != user1.email and user2:
+                    return '2'
+                if user_value != user1.email:
+                    user1.email = user_value
+                    db.session.add(user1)
+                    db.session.commit()
+                    return '1'
+            elif user_key == 'telephone':
+                user2 = User.query.filter(User.telephone == user_value).first()
+                if user_value != user1.telephone and user2:
+                    return '2'
+                if user_value != user1.telephone:
+                    user1.telephone = user_value
+                    db.session.add(user1)
+                    db.session.commit()
+                    return '1'
+            elif user_key == "username":
+                if user1.username != user_value:
+                    user1.username = user_value
+                    db.session.add(user1)
+                    db.session.commit()
+                    return '1'
+        except:
+            return '0'
 
 
 @app.route('/update_title/', methods=['POST'])
@@ -199,6 +254,7 @@ def add_comments():
 
 
 @app.route("/update_backgroud/", methods=['POST'])
+@login_required
 def update_backgroud():
     back_color = request.form.get('backgroud')
     try:
@@ -273,63 +329,82 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/question/',methods=['GET', 'POST'])
+@app.route('/question/', methods=['GET', 'POST'])
 @login_required
 def question():
-    if request.method == 'GET':
-        types = Type.query.all()
-        backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
-        return render_template('question.html', types=types, backgroud=backgroud_model)
-    else:
-        title = request.form.get('title')
-        content = request.form.get('content')
-        type = request.form.get('type')
-        assginee = request.form.get('assginee')
-        question = Question(title=title, content=content)
-        type = Type.query.filter(Type.type == type).first()
-        estimated = request.form.get('estimated')
-        if estimated:
-            question.estimated = estimated
-            question.remaining = estimated
-        if assginee:
-            question.assignee = assginee
-            question.status_id = 1
+    permission = Permission.query.filter(Permission.author_id == g.user.id).first()
+    if permission.permission == 'admin' or permission.permission == 'update':
+        if request.method == 'GET':
+            types = Type.query.all()
+            backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
+            return render_template('question.html', types=types, backgroud=backgroud_model,permission=permission)
         else:
-            question.status_id = 7
-        question.log = 0
-        question.type_id = type.id
-        question.author = g.user
-        question.reporter = g.user.username
-        db.session.add(question)
-        db.session.commit()
-        return redirect(url_for('index'))
+            title = request.form.get('title')
+            content = request.form.get('content')
+            type = request.form.get('type')
+            assginee = request.form.get('assginee')
+            question = Question(title=title, content=content)
+            type = Type.query.filter(Type.type == type).first()
+            estimated = request.form.get('estimated')
+            if estimated:
+                question.estimated = estimated
+                question.remaining = estimated
+            if assginee:
+                question.assignee = assginee
+                question.status_id = 1
+            else:
+                question.status_id = 7
+            question.log = 0
+            question.type_id = type.id
+            question.author = g.user
+            question.reporter = g.user.username
+            db.session.add(question)
+            db.session.commit()
+            return redirect(url_for('index'), permission=permission)
+    else:
+        return "您没有权限创建任务，请联系管理员"
 
 
 @app.route('/detail/<question_id>/')
 @login_required
 def detail(question_id):
+    permission = Permission.query.filter(Permission.author_id == g.user.id).first()
+    backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
     question_model = Question.query.filter(Question.id == question_id).first()
     type_model = Type.query.all()
-    backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
-    return render_template('detail.html', question=question_model, type=type_model, backgroud=backgroud_model)
+    # user = User.query.filter(User.id == g.user.id).first()
+    if permission.permission == 'admin' or permission.permission=='update':
+        return render_template('detail.html', question=question_model, type=type_model, backgroud=backgroud_model,permission=permission)
+    else:
+        return render_template('common_detail.html', question=question_model, type=type_model, permission=permission, backgroud=backgroud_model)
 
 
-@app.route('/add_answer/', methods=['POST'])
+@app.route('/update_permission/', methods=['GET', 'POST'])
 @login_required
-def add_answer():
-    content = request.form.get('answer_content')
-    question_id = request.form.get('question_id')
-    answer = Answer(content=content)
-    answer.author = g.user
-    question = Question.query.filter(Question.id == question_id).first()
-    answer.question = question
-    db.session.add(answer)
-    db.session.commit()
-    return redirect(url_for('detail', question_id=question_id))
+def update_permission():
+    permission_all = Permission.query.all()
+    permission = Permission.query.filter(Permission.author_id == g.user.id).first()
+    backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
+    if request.method == 'GET':
+        return render_template('permission.html', backgroud=backgroud_model, permission_all=permission_all,permission=permission)
+    else:
+        user_id = request.form.get('user_id')
+        permissiom_value = request.form.get('permission_value')
+        if int(user_id) == g.user.id:
+            return '2'
+        try:
+            permission = Permission.query.filter(Permission.author_id == user_id).first()
+            permission.permission = permissiom_value
+            db.session.add(permission)
+            db.session.commit()
+            return '1'
+        except:
+            return '0'
 
 
 @app.route('/search/')
 def search():
+    permission = Permission.query.filter(Permission.author_id == g.user.id).first()
     q = request.args.get('q')
     # title,content
     # 或
@@ -338,7 +413,7 @@ def search():
     # 与
     questions = Question.query.filter(Question.title.contains(q))
     backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
-    return render_template('index.html', questions=questions, q=q, backgroud=backgroud_model)
+    return render_template('index.html', questions=questions, q=q, backgroud=backgroud_model, permission=permission)
 
 
 @app.before_request

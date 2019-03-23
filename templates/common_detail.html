@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}详情-{% endblock %}
+
+{% block head %}
+    <script src="/static/js/detail.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
+{% endblock %}
+
+{% block main %}
+
+    <p class="question-info">
+        <span>创建者：{{ question.author.username }}</span>
+        <span>时间：{{ question.create_time }}</span>
+    </p>
+    <ul class="question-list-group">
+      <li>
+        <div>
+          <h4 style="color: blue">ONELABS-{{ question.id }}</h4>
+          <h3 id="title_value" >{{ question.title }}</h3>
+            <input id="backgroud_color" type="hidden" value="{{ backgroud.style_color}}">
+        </div>
+      </li>
+    </ul>
+    <div  class="btn-toolbar" role="toolbar" aria-label="...">
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-default">开发者</button>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  更多
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="task_logged" href="#task_logged">工作日志</a></li>
+                  <li><a class="task_comment" href="#task_comment">注释</a></li>
+                  <li><a class = "task_history" href="#task_history">历史记录</a></li>
+                </ul>
+            </div>
+    </div>
+        <div class="btn-group" role="group" aria-label="...">
+            {% if question.status.status =='待选择' %}
+            <button id="open" type="button" class="btn btn-default">打开</button>
+          <button id="progress" type="button" class="btn btn-default">开始任务</button>
+          <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">准备测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% elif question.status.status =='已选择' %}
+            <button id="open" type="button" class="btn btn-default">已经打开</button>
+          <button id="progress" type="button" class="btn btn-default">开始任务</button>
+          <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">准备测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% elif question.status.status =='进行中'%}
+             <button id="open" type="button" class="btn btn-default">打开任务</button>
+          <button id="progress" type="button" class="btn btn-default">任务进行中</button>
+          <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">准备测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% elif question.status.status =='完成'%}
+            <button id="open" type="button" class="btn btn-default">打开</button>
+          <button id="progress" type="button" class="btn btn-default">开始任务</button>
+          <button id="resolve" type="button" class="btn btn-default">任务已解决</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">准备测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% elif question.status.status =='待测试'%}
+            <button id="open" type="button" class="btn btn-default">打开任务</button>
+          <button id="progress" type="button" class="btn btn-default">开始任务</button>
+          <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">待测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% elif question.status.status =='测试中'%}
+            <button id="open" type="button" class="btn btn-default">打开任务</button>
+            <button id="progress" type="button" class="btn btn-default">开始任务</button>
+            <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+            <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+            <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+            <button id="test" type="button" class="btn btn-default">准备测试</button>
+            <button id="testing" type="button" class="btn btn-default">测试中</button>
+            {% elif question.status.status =='关闭'%}
+          <button id="ready_test" type="button" class="btn btn-default">测试</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button> {% elif question.status.status =='关闭'%}
+          {% elif question.status.status == "重新打开" %}
+            <button id="open" type="button" class="btn btn-default">已经打开</button>
+          <button id="progress" type="button" class="btn btn-default">开始任务</button>
+          <button id="resolve" type="button" class="btn btn-default">解决任务</button>
+          <button id="close_task" type="button" class="btn btn-default">关闭任务</button>
+          <button id="reopen" type="button" class="btn btn-default">重新打开任务</button>
+          <button id="test" type="button" class="btn btn-default">准备测试</button>
+          <button id="testing" type="button" class="btn btn-default">测试</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <h2 >详细</h2>
+    <input id="question_id" type="hidden" name="question_id" value="{{ question.id }}">
+    <div id="c1"></div>
+    <div class ="detail_message">
+        <span class="property">类型 : </span>
+        <span class="property">
+           {{ question.type.type }}
+        </span>
+        <span class="property">状态 :</span>
+            <span class="task_status">{{ question.status.status }}</span>
+    </div>
+    <span class="property">预计时间:</span><input id="estimated" type="text" readonly="readonly" value="{{ question.estimated }}" style="width:35px;">
+    <span>小时</span>
+    <span class="property">剩余时间:</span><span id ="remaining">{{ question.remaining }}小时</span>
+    <span class="property">花费时间:</span><span id="logged">{{ question.log }}小时 </span>
+    <div class ="detail_message">
+        <span class="property">开发者 : </span>
+    <span id = "assignee">{{ question.assignee }}</span>
+    </div>
+    <div class ="detail_message">
+        <span class="property">提出者 : </span>
+    <span id = "reporter">{{ question.reporter }}</span>
+    </div>
+    <div class ="detail_message">任务描述</div>
+    <textarea id="task_content" readonly="readonly" name="content" rows="5" placeholder="请输入内容" style="width: 40%" class="form-control">{{ question.content }}</textarea>
+
+    <h2>操作</h2>
+    <div id="c1"></div>
+     <div  class="btn-toolbar" role="toolbar" aria-label="...">
+      <div class="btn-group" role="group" aria-label="...">
+          <button id="task_comment" type="button" class="btn btn-default">注释</button>
+          <button id="task_history" type="button" class="btn btn-default">历史记录</button>
+          <button id="task_logged" type="button" class="btn btn-default">工作日志</button>
+      </div>
+     </div>
+     <ul id="log" class="logged-list" style="display: none">
+
+        {% for log in question.loggeds %}
+            <div id="c1"></div>
+            <li>
+                <span class="username">{{ log.author.username }}</span>
+                <span class = "description">花费时间</span>
+                <span class="comment">{{ log.log }}小时</span>
+                <span class="create_time">--{{ log.create_time }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <ul id="comments" class="comment-list" style="display: none">
+
+        {% for comment in question.comments %}
+            <div id="c1"></div>
+            <li>
+                <span class="username">{{ comment.author.username }}</span>
+                <span class = "description">添加注释</span>
+                <span class="comment">{{ comment.comment }}</span>
+                <span class="create-time">--{{ comment.create_time }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <ul id="history" class="history-list" style="display: none">
+        {% for history in question.historys %}
+            <div id="c1"></div>
+            <table width="45%" cellspacing="20px">
+                <tr>
+                    <td>{{ history.author.username }}</td>
+                    <td>{{ history.option }} 任务</td>
+                    <td>--{{ history.create_time }}</td>
+                </tr>
+                <tr>
+
+                    <td>字段</td>
+                    <td>老值</td>
+                    <td>新值</td>
+                </tr>
+                <tr>
+                    <td>{{ history.key }}</td>
+                    <td>{{ history.old_value }}</td>
+                    <td>{{ history.new_value }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </ul>
+{% endblock %}

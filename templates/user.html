@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}个人资料修改{% endblock %}
+
+{% block head %}
+{#    <script>$("#cheat_task").style.background='#e7e7e7'</script>#}
+    <script src="/static/js/user.js?v=1.0.1"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/user.css') }}">
+{% endblock %}
+
+{% block main %}
+    <input id="backgroud_color" type="hidden" value="{{ backgroud.style_color}}">
+    <div class="content">
+        <h3>基本资料修改</h3>
+        <div id="c1"></div>
+        <div class="reminder_message" style="display: none">用户名修改成功</div>
+        <div class="form-container">
+            <span><label>用户名 : </label></span>
+            <span class="form-message">
+                <input type="text" onblur="check_username()" onfocus="edit_username()" class="username" value="{{ user.username }}" placeholder="请输15位以内的昵称" name="fullName">
+            </span>
+            <span class="username_message" style="color: red"></span>
+        </div>
+        <div class="form-container">
+            <span><label>手机号 : </label></span>
+            <span class="form-message">
+                <input type="text" onblur="check_telephone()" onfocus="edit_telephone()" class="telephone" value="{{ user.telephone }}" placeholder="请输15位以内的昵称" name="fullName">
+            </span>
+            <span class="telephone_message" style="color: red"></span>
+        </div>
+        <div class="form-container">
+            <span><label>邮 箱 :</label></span>
+            <span class="form-message" style="margin: 28px">
+                {% if user.email %}
+                    <input type="text" onblur="check_mail()" onfocus="edit_mail()" class="email" value="{{ user.email }}" placeholder="请输入您修改的邮箱" name="fullName">
+                    {% if user.validate==0 %}
+                        <a id="check_email">验证邮箱</a>
+                    {% else %}
+                        <a>邮箱已验证</a>
+                    {% endif %}
+                {% else %}
+                    <input type="text" onblur="check_mail()" onfocus="edit_mail()" class="email" value="" placeholder="请添加您的邮箱" name="fullName">
+                {% endif %}
+            </span>
+            <span class="email_message" style="color: red"></span>
+        </div>
+        <div class="form-container" style="display: none">
+            <span><label>验证码 :</label></span>
+            <span class="form-message">
+            <input type="text" class="txt" value="" placeholder="请输验证码" name="fullName">
+            </span>
+        </div>
+        <div id="c1"></div>
+        <h3>密码修改</h3>
+        <div id="c1"></div>
+        <div class="form-container">
+            <span><label>原密码  :</label></span>
+            <span class="form-message">
+                <input type="password" onblur="check_password()" onfocus="edit_password()" class="password" placeholder="请输原密码" name="fullName">
+            </span>
+            <span class="password_message" style="color: red"></span>
+        </div>
+        <div class="form-container">
+            <span><label>新密码  :</label></span>
+            <span class="form-message">
+                <input type="password" class="password1" onblur="check_password1()" onfocus="edit_password1()" placeholder="请输新密码" name="fullName">
+            </span>
+            <span class="password_message1" style="color: red"></span>
+        </div>
+        <div class="form-container">
+            <span><label>确认密码 :</label></span>
+            <span class="form-message" style="margin: 8px">
+                <input type="password" onblur="check_password2()" onfocus="edit_password2()" class="password2" placeholder="请确认新密码" name="fullName">
+            </span>
+            <span class="password_message2" style="color: red"></span>
+        </div>
+        <div class="form-group">
+             <button onclick="update_password()" style="margin-left: 200px" type="submit" class="btn btn-primary">修改密码</button>
+        </div>
+    </div>
+{% endblock %}

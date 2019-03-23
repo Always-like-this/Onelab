@@ -15,10 +15,6 @@
                     <img title="{{ question.type.type }}" src="{{ url_for('static',filename="images/"+question.type.type+".png") }}" alt="" class="avatar">
                     <p class="question-title"><a title="{{ question.type.type }}" href="{{ url_for('detail',question_id=question.id) }}">ONELABS-{{ question.id }}</a></p>
                     <p class="question-content"><a href="{{ url_for('detail',question_id=question.id) }}">{{ question.title }}</a></p>
-{#                    <div class="question-info">#}
-{#                        <span class="question-author">{{ question.author.username }}</span>#}
-{#                        <span class="question-time">{{ question.create_time }}</span>#}
-{#                    </div>#}
                 </div>
             </li>
 

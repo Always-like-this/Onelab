@@ -99,6 +99,10 @@ $(document).ready(function() {
                     alert("出现未知错误！！！")
                 } else {
                     alert('修改成功');
+                    setTimeout(function (){
+                        $(".reminder_message").css('display','none');
+                        window.location.reload();},
+                        2000);
                     window.location.reload();
                 }
             }
@@ -184,7 +188,7 @@ function edit_content(){
     })
 }
 function edit_comments(){
-    var comments = prompt("请输入开发者", "");
+    var comments = prompt("请输入注释", "");
     if(comments){
         var comments = comments.replace(/\ +/g,"");
         var question_id = $("#question_id").val();
@@ -205,7 +209,7 @@ function edit_comments(){
     }
 }
 function add_log(){
-    var log = prompt("请输入开发者", "");
+    var log = prompt("请输入工作时间", "");
     var log = log.replace(/\ +/g,"");
     var question_id = $("#question_id").val();
     $.ajax({
