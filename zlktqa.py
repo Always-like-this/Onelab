@@ -15,7 +15,7 @@ db.init_app(app)
 @login_required
 def index():
     context = {
-        'questions': Question.query.order_by('-create_time').all(),
+        'questions': Question.query.order_by('create_time').all(),
         'backgroud': Backgroud.query.filter(Backgroud.author == g.user).first(),
         'permission': Permission.query.filter(Permission.author_id == g.user.id).first(),
 
@@ -58,8 +58,13 @@ def regist():
             if password1 != password2:
                 return u'两次密码不相等，请核对后再填写！'
             else:
-                user = User(telephone=telephone,username=username,password=password1)
+                user = User(telephone=telephone, username=username, password=password1)
                 db.session.add(user)
+                db.session.commit()
+                user = User.query.filter(User.telephone == telephone).first()
+                user_id = user.id
+                permission = Permission(author_id=user_id, permission='common')
+                db.session.add(permission)
                 db.session.commit()
                 # 如果注册成功，就让页面跳转到登录的页面
                 return redirect(url_for('login'))
@@ -114,6 +119,7 @@ def edit_info():
                     return '2'
                 if user_value != user1.email:
                     user1.email = user_value
+                    user1.validate = 0
                     db.session.add(user1)
                     db.session.commit()
                     return '1'
@@ -298,14 +304,18 @@ def add_log():
 
 @app.route('/update_status/', methods=['POST'])
 def update_status():
-    status = request.form.get('status')
+    status_name = request.form.get('status')
     question_id = request.form.get('question_id')
     try:
         question = Question.query.filter(Question.id == question_id).first()
-        status = Status.query.filter(Status.status == status).first()
+        old_value = question.status.status
+        status = Status.query.filter(Status.status == status_name).first()
         question.status_id = status.id
         db.session.add(question)
         db.session.commit()
+        key = "状态"
+        new_value = status_name
+        log(key, question, old_value, new_value)
         return '1'
     except:
         return '0'

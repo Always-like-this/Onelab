@@ -1,6 +1,9 @@
 function check_mail(){
     var str = $(".email").val();
     var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+    if(str==""){
+        window.location.reload();
+    }
     if(!re.test(str)&&str){
         $(".email_message").text("!请输入正确的邮箱");
     }
@@ -43,8 +46,7 @@ function check_telephone(){
     // $(".telephone_message").text("");
     var phone = $(".telephone").val();
     if(phone==""){
-        $(".telephone_message").text("手机号码不为空");
-        return false;
+        window.location.reload();
     }
     if(!(/^1[34578]\d{9}$/.test(phone))) {
         $(".telephone_message").text("手机号码有误，请重填");
@@ -136,7 +138,7 @@ function check_password2() {
 function check_username(){
     var username = $(".username").val();
     if(username==""){
-        alert("用户名不为空");
+        window.location.reload();
     }else{
         $.ajax({
             url:'/edit_info/',
