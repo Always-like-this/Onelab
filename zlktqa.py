@@ -370,7 +370,7 @@ def question():
             question.reporter = g.user.username
             db.session.add(question)
             db.session.commit()
-            return redirect(url_for('index'), permission=permission)
+            return redirect(url_for('index'))
     else:
         return "您没有权限创建任务，请联系管理员"
 
@@ -424,6 +424,13 @@ def search():
     questions = Question.query.filter(Question.title.contains(q))
     backgroud_model = Backgroud.query.filter(Backgroud.author == g.user).first()
     return render_template('index.html', questions=questions, q=q, backgroud=backgroud_model, permission=permission)
+
+
+@app.route('/send_email/', methods=['POST'])
+def send_email():
+    receiver = request.form.get('receiver')
+    content = request.form.get('content')
+    send_email(receiver, content)
 
 
 @app.before_request

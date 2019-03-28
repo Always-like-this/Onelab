@@ -3,8 +3,8 @@
 }
 
 body{
-    background: #f3f3f3;
-    /*background-image:url("/static/images/4.jpg");*/
+    /*background: #f3f3f3;*/
+    background-image:url("/static/images/111.jpg");
 
 }
 /*.main{*/
@@ -25,6 +25,6 @@ body{
 .page-title{
     text-align: center;
 }
-/*#top_page{*/
-    /*!*background-image:url("/static/images/4.jpg");*!*/
-/*}*/
+#top_page{
+    background-image:url("/static/images/111.jpg");
+}

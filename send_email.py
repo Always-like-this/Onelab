@@ -13,9 +13,10 @@ mail_pass = "legdkgptnvhaebgh"
 
 sender = '1772635346@qq.com'  # 发件人邮箱(最好写全, 不然会失败)
 # receiver = '2657344219@qq.com'  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱   #只能单发
-
+# receiver = '2335610533@qq.com'
 title = 'Python原生Header方法邮件发送测试'  # 邮件主题
 # content = '此账号仅供测试，请大神们不要修改邮箱密码。'  # 内容
+# content = ''  # 内容
 
 
 # SMTP服务器  # 登陆       #密码       #发送给谁   #主题     #内容

@@ -34,7 +34,8 @@
                 {% if user.email %}
                     <input type="text" onblur="check_mail()" onfocus="edit_mail()" class="email" value="{{ user.email }}" placeholder="请输入您修改的邮箱" name="fullName">
                     {% if user.validate==0 %}
-                        <a id="check_email">验证邮箱</a>
+{#                        <a id="check_email" onclick="">验证邮箱</a>#}
+{#                        <span><input type="text" placeholder="请输入验证码" onblur="check_code()"></span>#}
                     {% else %}
                         <a>邮箱已验证</a>
                     {% endif %}

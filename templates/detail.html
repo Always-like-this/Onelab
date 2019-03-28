@@ -88,7 +88,6 @@
             <button id="test" onclick="test()" type="button" class="btn btn-default">准备测试</button>
             <button id="testing" type="button" class="btn btn-default">测试中</button>
             {% elif question.status.status =='关闭'%}
-          <button id="ready_test" onclick="ready_test()" type="button" class="btn btn-default">测试</button>
           <button id="reopen" onclick="reopen()" type="button" class="btn btn-default">重新打开任务</button> {% elif question.status.status =='关闭'%}
           {% elif question.status.status == "重新打开" %}
             <button id="open" type="button" class="btn btn-default">已经打开</button>

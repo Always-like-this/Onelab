@@ -15,7 +15,7 @@ function check_phone() {
             dataType:'json',
             success:function(data){
                 if(data == 1){
-                    $("#telephone_error_message").text("用户名已存在");
+                    $("#telephone_error_message").text("手机号已存在");
                 }
                 else{
                     $("#telephone_error_message").text("");
